@@ -1,4 +1,4 @@
-const notesDbModel = require("../model/notesmodel");
+const notesDb = require("../model/notesmodel");
 
 
 //creating note
@@ -11,7 +11,7 @@ exports.createNote = (req, res) => {
     }
 
     //creating a note
-    const note = new notesDbModel({
+    const note = new notesDb({
         title: req.body.title || "Untitled Note!",
         content: req.body.content
     });
@@ -34,8 +34,19 @@ exports.createNote = (req, res) => {
 
 // showing all notes
 exports.showAllNotes = (req, res) => {
-    res.json({
-        message: "hello from controller to showallnotes route"
+    notesDb.find().then((data) => {
+        if (!data) {
+            res.status(404).send({
+                message: "Item not found"
+            });
+        } else {
+            res.send(data);
+        }
+
+    }).catch((err) => {
+        res.status(500).send({
+            message: err.message || "There is a problem while getting notes!"
+        });
     });
 };
 

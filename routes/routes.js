@@ -19,4 +19,6 @@ router.get('/api/notes.:noteId' , notesController.showOneNote);
  router.put('/api/notes/:noteId' , notesController.updateNote);
  //deleting notes
  router.delete('/api/notes/:noteId' , notesController.deleteNote);
+
+ 
  module.exports = router;

@@ -14,11 +14,10 @@ router.post('/api/notes' , notesController.createNote);
 // Getting all notes
 router.get('/api/notes' , notesController.showAllNotes);
  // Getting one note with id
-router.get('/api/notes.:noteId' , notesController.showOneNote);
+router.get('/api/notes/:noteId' , notesController.showOneNote);
  //updating notes
  router.put('/api/notes/:noteId' , notesController.updateNote);
  //deleting notes
  router.delete('/api/notes/:noteId' , notesController.deleteNote);
-
  
  module.exports = router;

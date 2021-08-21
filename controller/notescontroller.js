@@ -52,23 +52,61 @@ exports.showAllNotes = (req, res) => {
 
 //show one note
 exports.showOneNote = (req, res) => {
-    res.json({
-        message: "hello from controller to showOneNote route"
-    });
+    const id = req.params.noteId;
+    notesDb.findById(id)
+        .then((data) => {
+            if (!data) {
+                res.status(404).send({
+                    message: "Item not found"
+                });
+            }
+            res.send(data);
+        }).catch((err) => {
+            res.status(500).send({
+                message: err.message || "There is a problem while gettting data"
+            });
+        });
 };
 
 
 //update note
 exports.updateNote = (req, res) => {
-    res.json({
-        message: "hello from controller to showOneNote route"
+    //validating request 
+    if (!req.body.content) {
+        return res.status(400).send({
+            message: "Note content cannot be empty"
+        });
+    }
+    //finding note and updating note with id
+    const id = req.params.noteId;
+    notesDb.findByIdAndUpdate(id, req.body, {
+        new: true,
+        useFindAndModify: false
+    }).then((data) => {
+        res.send(data);
+    }).catch((err) => {
+        res.status(500).send({
+            message: err.message || "There is a problem while updating data"
+        });
     });
 };
 
 
 //delete note
 exports.deleteNote = (req, res) => {
-    res.json({
-        message: "hello from controller to showOneNote route"
+    //getting id 
+    const id = req.params.noteId;
+    notesDb.findByIdAndDelete(id).then((data) => {
+        if (!data) {
+            return res.status(404).send({
+                message: "Note not found"
+            });
+        }
+        res.send({message: "Note deleted successfully!"});
+
+    }).catch((err) => {
+        res.status(500).send({
+            message: err.message || "There is a problem while deleting data"
+        });
     });
 };
